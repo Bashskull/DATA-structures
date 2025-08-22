@@ -1,0 +1,140 @@
+class Solution {
+public:
+    int orangesRotting(vector<vector<int>>& grid) {
+        //bfs traversal solution
+        //step1
+        //setup->quwu, ans, vis
+        int n=grid.size();
+        int m=grid[0].size();
+        queue<pair<pair<int,int>,int>> Q;
+        vector<vector<int>> vis(n,vector<int> (m));
+        int fresh=0;
+        //step2
+        //pick starting node,push in queue and mark it
+        for (int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if (grid[i][j]==2){
+                    pair<pair<int,int>,int> start={{i,j},0};
+                    vis[i][j]==2;
+                    Q.push(start);
+                }
+                //count fresh ones
+                else if (grid[i][j]==1){
+                    fresh++;
+                }
+            }
+        }
+        int time=0;
+        int rotted=0;
+        vector<int> delrow={0,1,0,-1};
+        vector<int> delcol={-1,0,1,0};
+        //step3->while loop-->pop stuff, visit its neighbours
+        while(!Q.empty()){
+            pair<pair<int,int>,int> node=Q.front();
+            Q.pop();
+            int row=node.first.first;
+            int col=node.first.second;
+            int t=node.second;
+            time=max(time,t);
+            //step4-->if not marked then its a neighbour ,
+            //first mark it.then add to queue
+            for (int i=0;i<4;i++){
+                int nrow=row+delrow[i];
+                int ncol=col+delcol[i];
+                if (nrow>=0 && ncol>=0 && ncol<m && nrow<n
+                    && (grid[nrow][ncol]==1) && !(vis[nrow][ncol]==2)){
+                        vis[nrow][ncol]=2;
+                        Q.push({{nrow,ncol},t+1});
+                        rotted++;
+                }
+            }
+        }    
+        if (rotted!=fresh) return -1;
+        return time;
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//okay hardtruth is that i cant use bfs a function here...
+
+    //     int n=grid.size();
+    //     int m=grid[0].size();
+    //     int t=0;
+    //     vector<vector<int>> vis(n,vector<int> (m));
+    //     for(int i=0;i<n;i++){
+    //         for(int j=0;j<m;j++){
+    //             if (grid[i][j]==2){
+    //                 pair<pair<int,int>,int> start={{i,j},t};
+    //                 //vis[i][j]=2;
+    //                 t = max(t, bfs(start, grid, vis)); 
+    //                 //t=bfs(start,grid,vis);
+    //             }
+    //             else{
+    //                 vis[i][j]=0;
+    //             }
+    //         }
+    //     }
+    //     for(int i=0;i<n;i++){
+    //         for(int j=0;j<m;j++){
+    //             if (!(vis[i][j]==2) && (grid[i][j]==1)){
+    //                 return -1;;
+    //             }
+    //         }
+    //     }
+    //     return t;
+    // int bfs(pair<pair<int,int>,int>& start,vector<vector<int>>& grid,vector<vector<int>>& vis){
+    //     int maxtime=0;
+    //     int n=grid.size();
+    //     int m=grid[0].size();
+    //     queue<pair<pair<int,int>,int>> Q;
+    //     Q.push(start);
+    //     while(!Q.empty()){
+    //         int row=Q.front().first.first;
+    //         int col=Q.front().first.second;
+    //         int time=Q.front().second;
+    //         maxtime=max(maxtime,time);
+    //         Q.pop();
+    //         int delrow[]={-1,0,1,0};
+    //         int delcol[]={0,1,0,-1};
+    //         for (int i=0;i<4;i++){
+    //             int nrow=row+delrow[i];
+    //             int ncol=col+delcol[i];
+    //             if ( nrow>=0 && nrow<n && ncol<m && ncol>=0 &&!(vis[nrow][ncol]==2) && (grid[nrow][ncol]==1)){
+    //                 vis[nrow][ncol]=2;
+    //                 Q.push({{nrow,ncol},time+1});
+    //             }
+    //         }
+    //     }
+    //     return maxtime;
