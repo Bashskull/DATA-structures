@@ -1,0 +1,84 @@
+class Solution {
+public:
+    void dfs(int i,int j,vector<vector<char>>& board,vector<vector<int>>& vis){
+        vis[i][j]=1;
+        int n=board.size();
+        int m=board[0].size();
+        vector<int> delrow={1,0,-1,0};
+        vector<int> delcol={0,1,0,-1};
+        for (int k=0;k<4;k++){
+            int nrow=i+delrow[k];
+            int ncol=j+delcol[k]; 
+            if (nrow>=0 && ncol>=0 && nrow<n && ncol<m && board[nrow][ncol]=='O' && !(vis[nrow][ncol])){
+                dfs(nrow,ncol,board,vis);
+            }
+        }       
+    }
+    void solve(vector<vector<char>>& board) {
+        int n=board.size();
+        int m=board[0].size();
+        vector<vector<int>> vis(n,vector<int>(m));
+        for (int i=0;i<n;i++){
+            for (int j=0;j<m;j++){
+                if (!(vis[i][j]) && board[i][j]=='O' && i==0 ){
+                    dfs(i,j,board,vis);
+                }
+                else if (!(vis[i][j]) && board[i][j]=='O' && i==n-1 ){
+                    dfs(i,j,board,vis);
+                }
+                else if (!(vis[i][j]) && board[i][j]=='O' && j==0 ){
+                    dfs(i,j,board,vis);
+                }
+                else if (!(vis[i][j]) && board[i][j]=='O' && j==m-1 ){
+                    dfs(i,j,board,vis);
+                }
+            }
+        }
+        // if (!(vis[i][j]) && board[i][j]=='O' && i>0 && j>0 && i<n-1 && j<m-1){
+        //     board[i][j]='X';
+        // }
+
+       for(int i = 0;i<n;i++) {
+            for(int j= 0 ;j<m;j++) {
+                if(!vis[i][j] && board[i][j] == 'O') 
+                    board[i][j] = 'X'; 
+            }
+        }
+        
+    }
+};
+
+//my og solution-passes 25/58 cases
+// class Solution {
+// public:
+//     void dfs(int i,int j,vector<vector<char>>& board,vector<vector<int>>& vis){
+//         vis[i][j]=1;
+//         int n=board.size();
+//         int m=board[0].size();
+//         if (i==0 || j==0 || j==m-1 || i==n-1) return;
+//         if (!(i==0) && !(j==0) && !(j==m-1) && !(i==n-1) ) board[i][j]='X';
+//         vector<int> delrow={1,0,-1,0};
+//         vector<int> delcol={0,1,0,-1};
+//         for (int k=0;k<4;k++){
+//             int nrow=i+delrow[k];
+//             int ncol=j+delcol[k];
+//             if (!(vis[nrow][ncol]) && board[nrow][ncol]=='O'){
+//                 dfs(nrow,ncol,board,vis);
+//             }
+//         }
+//     }
+//     void solve(vector<vector<char>>& board) {
+//         int n=board.size();
+//         int m=board[0].size();
+//         vector<vector<int>> vis(n,vector<int>(m));
+//         for (int i=0;i<n;i++){
+//             for (int j=0;j<m;j++){
+//                 if (!vis[i][j] && board[i][j]=='O'){
+//                     cout<<i<<j<<endl;
+//                     dfs(i,j,board,vis);
+//                 }
+//             }
+//         }
+        
+//     }
+// };
