@@ -1,0 +1,32 @@
+class Solution {
+  public:
+    int spanningTree(int V, vector<vector<int>>& edges) {
+        vector<int> vis(V);
+        vector<vector<pair<int,int>>> adj(V);
+        priority_queue<pair<int,int>,vector<pair<int,int>>,greater<pair<int,int>>> pq;
+        pq.push({0,0});
+        for (auto it:edges){
+            adj[it[0]].push_back({it[2],it[1]});
+            adj[it[1]].push_back({it[2],it[0]});            
+        }
+        int sum=0;
+        while (!pq.empty()){
+            auto it=pq.top();
+            pq.pop();
+            int node=it.second;
+            int wt=it.first;
+            if (vis[node]==1) continue;
+            if (vis[node]==0){
+                vis[node]=1;
+                sum=sum+wt;
+            } 
+            for (auto it2:adj[node]){
+                int anode=it2.second;
+                int awt=it2.first;
+                    pq.push({awt,anode});                    
+            }
+        }
+        return sum;
+        
+    }
+};
