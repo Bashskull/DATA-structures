@@ -1,0 +1,67 @@
+// User function Template for C++
+
+class DSU {
+    vector<int> rank,parent;
+public:
+    DSU(int n){
+        rank.resize(n+1,0);
+        parent.resize(n+1);
+        for (int i=0;i<n;i++){
+            parent[i]=i;
+        }
+    }
+    int findupar(int node){
+        if (node==parent[node]){
+            return node;
+        }
+        return parent[node]=findupar(parent[node]);
+    }
+    void Union(int u, int v){
+        int upar=findupar(u);
+        int vpar=findupar(v);
+        if(upar==vpar) return; 
+        if (rank[upar]>rank[vpar]){
+            parent[vpar]=upar;
+        }
+        else if(rank[upar]<rank[vpar]){
+            parent[upar]=findupar(vpar);
+        }
+        else{
+            parent[vpar]=findupar(upar);
+            rank[vpar]++;            
+        }
+    }
+};
+class Solution {
+  public:
+    int kruskalsMST(int V, vector<vector<int>> &edges) {
+        //sort(edges.begin(),edges.end(),[](const vector<int>& a,const vector<int>& b){return a[2]<b[2];});
+        // for (int i=0;i<V;i++){
+        //     cout<<edges[i][0]<<" "<<edges[i][1]<<" "<<edges[i][2]<<"\n";
+        // }
+        vector<vector<int>> edd;
+        for (auto it:edges){
+            int u=it[0];
+            int v=it[1];
+            int wt=it[2];
+            edd.push_back({wt,u,v});
+        }
+        DSU d(V);
+        sort(edd.begin(),edd.end());
+        int E=edges.size();
+        int sum=0;
+        //for(int i=0;i<E;i++){
+            for (auto it:edd){
+                int u=it[1];
+                int v=it[2];
+                int wt=it[0];
+                if(d.findupar(u)!=d.findupar(v)){
+                    d.Union(u,v);
+                    sum+=wt;
+                    
+                }
+            }            
+        //}
+        return sum;
+    }
+};
