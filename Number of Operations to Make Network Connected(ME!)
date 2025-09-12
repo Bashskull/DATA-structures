@@ -1,0 +1,63 @@
+class DSU {
+    vector<int> par,rank;
+    public:
+    DSU(int n){
+        par.resize(n+1);
+        rank.resize(n+1,0);
+        for(int i=0;i<n;i++){
+            par[i]=i;
+        }
+    }
+    int findupar(int node){
+        if (node==par[node]){
+            return node;
+        }
+        return par[node]=findupar(par[node]);
+    }
+    void unions(int u,int v){
+        int uparu=findupar(u);
+        int uparv=findupar(v);
+        if (uparu==uparv) return;
+        if (rank[uparu]>rank[uparv]){
+            par[uparu]=uparv;
+        }
+        else if (rank[uparu]<rank[uparv]){
+            par[uparv]=uparu;
+        }
+        else{
+            par[uparu]=uparv;
+            rank[uparu]++;            
+        }
+    }
+};
+class Solution {
+public:
+    int makeConnected(int n, vector<vector<int>>& connections) {
+        DSU d(n);
+        int extra=0;
+        for (auto it:connections){
+            int u=it[0];
+            int v=it[1];
+            if (d.findupar(u)!=d.findupar(v)){
+                d.unions(u,v);
+            }
+            else if (d.findupar(u)==d.findupar(v)){
+                extra++;
+            }
+        }
+        int need=-1;
+        for (int i=0;i<n;i++){
+            if (d.findupar(i)==i){
+                need++;
+            }
+        }
+        //need=need-1;
+        if (extra>=need){
+            return need;
+        }
+        return -1;
+
+
+        
+    }
+};
