@@ -1,0 +1,71 @@
+// User function Template for C++
+class DSU{
+    vector<int> par,rank;
+    public:
+    DSU(int n){
+        par.resize(n+1);
+        rank.resize(n+1,0);
+        for (int i=0;i<n+1;i++){
+            par[i]=i;
+        }
+    }
+    int findupar(int node){
+        if (node==par[node]){
+            return node;
+        }
+        return par[node]=findupar(par[node]);
+    }
+    void unions(int u,int v){
+        int uparu=findupar(u);
+        int uparv=findupar(v);
+        if (uparu==uparv) return;
+        if(rank[uparu]>rank[uparv]){
+            par[uparv]=uparu;
+        }
+        else if (rank[uparu]<rank[uparv]){
+            par[uparu]=uparv;
+        }
+        else{
+            par[uparu]=uparv;
+            rank[uparv]++;
+        }
+    }
+};
+class Solution {
+  public:
+    vector<int> numOfIslands(int n, int m, vector<vector<int>> &operators) {
+        DSU d(m*n);
+        vector<int> ans;
+        vector<int> islands(m*n);
+        //vector<vector<int>> ocean(n,m);
+        for(auto it:operators){
+            int u=it[0];
+            int v=it[1];
+            //ocean[u][v]=1;
+            int node=m*u+v;
+            islands[node]=1;
+
+            int dr[4] = {0,0,-1,1};
+            int dc[4] = {-1,1,0,0};
+            
+            for(int k=0;k<4;k++){
+                int nr = u + dr[k];
+                int nc = v + dc[k];
+                if(nr<0 || nr>=n || nc<0 || nc>=m) continue;
+                int nnode = nr*m + nc;
+                if(islands[nnode]) d.unions(node, nnode);
+            }
+
+            int count=0;
+            for (int i=0;i<m*n;i++){
+                if (islands[i]==1 && d.findupar(i)==i){
+                    count++;
+                    //cout<<"mango is "<<count<<"\n";
+                }
+            }
+            ans.push_back(count);
+        }
+        return ans;
+        
+    }
+};
