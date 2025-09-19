@@ -1,0 +1,89 @@
+class DSU{
+    public:
+    vector<int> parent,size;
+    DSU(int n){
+        parent.resize(n+1);
+        size.resize(n+1);
+        for(int i=0;i<=n;i++){
+            parent[i]=i;
+            size[i]=1;
+        }
+    }
+    int findupar(int node){
+        if (node==parent[node]) return parent[node];
+        return parent[node]=findupar(parent[node]);
+    }
+    void unions(int u, int v){
+        int uparu=findupar(u);
+        int uparv=findupar(v);
+        if(uparu==uparv) return;
+        if (size[uparu]<size[uparv]){
+            parent[uparu]=uparv;
+            size[uparv]+=size[uparu];
+        }
+        else if(size[uparu]>size[uparv]){
+            parent[uparv]=uparu;
+            size[uparu]+=size[uparv];            
+        }
+        else{
+            parent[uparu]=uparv;
+            size[uparv]+=size[uparu];            
+        }
+    }
+
+};
+class Solution {
+public:
+    int largestIsland(vector<vector<int>>& grid) {
+        int n=grid.size();
+        DSU d(n*n);
+        int mega=0;
+        int count=0;
+        for (int row=0;row<n;row++){
+            for(int col=0;col<n;col++){
+                if(grid[row][col]==1) count++;
+                if(grid[row][col]==0) continue;
+                int node=row*n+col;
+                vector<int> delrow={1,0,-1,0};
+                vector<int> delcol={0,1,0,-1};
+                for (int i=0;i<4;i++){
+                    int nrow=row+delrow[i];
+                    int ncol=col+delcol[i];
+                    if(nrow>=0 && ncol>=0 && nrow<n && ncol<n){
+                        int nnode=nrow*n+ncol;
+                        if(grid[row][col]==1 && grid[nrow][ncol]==1){
+                            d.unions(node,nnode);
+                        }
+                    }
+                }
+            }
+        }
+
+        for (int row=0;row<n;row++){
+            for (int col=0;col<n;col++){
+                if(grid[row][col]==1) continue;
+                int node=row*n+col;
+                vector<int> delrow={1,0,-1,0};
+                vector<int> delcol={0,1,0,-1};
+                set<int> ranker;
+                for (int i=0;i<4;i++){
+                    int nrow=row+delrow[i];
+                    int ncol=col+delcol[i];
+                    if(nrow>=0 && ncol>=0 && nrow<n && ncol<n){
+                        int nnode=nrow*n+ncol;
+                        if(grid[nrow][ncol]==1){
+                            ranker.insert(d.findupar(nnode));
+                        }
+                    }
+                }
+                int totalsize=1;
+                for (auto it:ranker){
+                    totalsize+=d.size[it];
+                }
+                mega=max(totalsize,mega);
+            }
+        }
+        if (count == n*n) return n*n;        
+        return mega;
+    }
+};
