@@ -1,0 +1,32 @@
+class Solution {
+public:
+    long long atoi(vector<char> stringer, int index){
+        if (index==0) return 0;
+        int last=stringer[index-1] -'0';
+        long long prev=atoi(stringer,index-1)*10;
+        if(prev>=INT_MAX) return 2147483648LL;
+        return prev+last;
+    }
+
+    int myAtoi(string s) {
+        int i=0;
+        int n=s.length();
+        while(i<n && s[i]==' ') i++;
+        bool ulta=false;
+        if(i<n && (s[i]=='-' || s[i]=='+')){
+            if(s[i]=='-') ulta=true;
+            i++;
+        }
+        vector<char> stringer;
+        while (i<n && isdigit(s[i])){
+            stringer.push_back(s[i]);
+            i++;
+        }
+        if(stringer.empty()) return 0;
+        long long ans=atoi(stringer,stringer.size());
+        if (ulta) ans=ans*-1;
+        if(ans>INT_MAX) return INT_MAX;
+        if(ans<INT_MIN) return INT_MIN;
+        return ans;
+    }
+};
