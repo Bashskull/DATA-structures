@@ -1,0 +1,45 @@
+my solution- highspace complexity but works
+class Solution {
+public:
+    void recurse(int index,vector<int> mini,vector<int>& nums,set<vector<int>>& ans){
+        if(index==nums.size()){
+            ans.insert(mini);
+            return;
+        }
+        vector<int> nom=mini;
+        nom.push_back(nums[index]);
+        recurse(index+1,nom,nums,ans);
+        recurse(index+1,mini,nums,ans);
+    }
+    vector<vector<int>> subsetsWithDup(vector<int>& nums) {
+        sort(nums.begin(),nums.end());
+        set<vector<int>> ans;
+        recurse(0,{},nums,ans);
+        vector<vector<int>> answer(ans.begin(),ans.end());
+        return answer;
+    }
+};
+
+
+
+
+optimal solution
+class Solution {
+public:
+    void recurse(int index,vector<int> &solve,vector<int>& nums, vector<vector<int>>& ans){
+        ans.push_back(solve);
+        for(int i=index;i<nums.size();i++){
+            if(i!=index && nums[i]==nums[i-1]) continue;
+            solve.push_back(nums[i]);
+            recurse(i+1,solve,nums,ans);
+            solve.pop_back();
+        }
+    }
+    vector<vector<int>> subsetsWithDup(vector<int>& nums) {
+        sort(nums.begin(),nums.end());
+        vector<vector<int>> ans;
+        vector<int> solve;
+        recurse(0,solve,nums,ans);
+        return ans;
+    }
+};
