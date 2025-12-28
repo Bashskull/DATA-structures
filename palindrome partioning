@@ -1,0 +1,28 @@
+class Solution {
+public:
+    void recurse(int index,string s,vector<string>& solve,vector<vector<string>>& ans){
+        if(index==s.length()){
+            ans.push_back(solve);
+            return;
+        }
+        for(int i=index;i<s.length();i++){
+            if(ispaly(s,index,i)){
+                solve.push_back(s.substr(index,i-index+1));
+                recurse(i+1,s,solve,ans);
+                solve.pop_back();
+            }
+        }
+    }
+    bool ispaly(string s, int start, int end) {
+        while (start<=end){
+            if(s[start++]!=s[end--]) return false;
+        }
+        return true;
+    }
+    vector<vector<string>> partition(string s) {
+        vector<vector<string>> ans;
+        vector<string> solve;
+        recurse(0,s,solve,ans);
+        return ans;
+    }
+};
