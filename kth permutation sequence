@@ -1,0 +1,24 @@
+class Solution {
+public:
+    void recurse(string s,int n,vector<int>&used,vector<string>& ans){
+        if(s.length()==n){
+            ans.push_back(s);
+            return;
+        }
+        for(int i=1;i<n+1;i++){
+            if(!used[i]){
+                used[i]=1;
+                s.push_back(char('0'+i));
+                recurse(s,n,used,ans);
+                s.pop_back();
+                used[i]=0;
+            }
+        }
+    }
+    string getPermutation(int n, int k) {
+        vector<int> used(n+1,0);
+        vector<string> permute;
+        recurse("",n,used,permute);
+        return permute[k-1];
+    }
+};
