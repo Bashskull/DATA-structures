@@ -1,0 +1,49 @@
+class Solution {
+public:
+    void recurse(int col,int n,vector<string>& solve,vector<vector<string>>& ans){
+        if(col==n){
+            ans.push_back(solve);
+            return;
+        } 
+        for(int row=0;row<n;row++){
+            if (isvalid(row,col,solve,n)){
+                solve[row][col]='Q';
+                recurse(col+1,n,solve,ans);
+                solve[row][col]='.';
+            }
+        }
+    }
+    vector<vector<string>> solveNQueens(int n) {
+        vector<vector<string>> ans;
+        vector<string> solve(n);
+        string s(n,'.');
+        for(int i=0;i<n;i++){
+            solve[i]=s;
+        }
+        recurse(0,n,solve,ans);
+        return ans;
+    }
+    bool isvalid(int row,int col,vector<string>& solve,int n){
+        int delrow=row;
+        int delcol=col;
+        while(delrow>=0 && delcol>=0){
+            if(solve[delrow][delcol]=='Q') return false;
+            delrow--;
+            delcol--;
+        }
+        delrow=row;
+        delcol=col;
+        while(delcol>=0){
+            if(solve[delrow][delcol]=='Q') return false;
+            delcol--;
+        }
+        delrow=row;
+        delcol=col;
+        while(delrow<n  && delcol>=0){
+            if(solve[delrow][delcol]=='Q') return false;
+            delcol--;
+            delrow++;
+        }
+        return true;
+    }
+};
