@@ -1,0 +1,33 @@
+class Solution {
+  public:
+  
+
+    bool recurse(int node,int v,int m,vector<vector<int>> &edges,vector<int> &color){
+        if(node==v){
+            return true;
+        }
+        for (int i=1;i<=m;i++){
+            if(theek(i,node,v,m,edges,color)){
+                color[node]=i;
+                if(recurse(node+1,v,m,edges,color)) return true;
+                else color[node]=0;
+            }
+        }
+        return false;
+    }
+    bool theek(int col,int node,int v,int m,vector<vector<int>> &edges,vector<int> &color){
+        for(auto it:edges){
+            int u=it[0];
+            int v=it[1];
+            if(u==node && color[v]==col) return false;
+            else if(v==node && color[u]==col) return false;
+        }
+        return true;
+    }
+    bool graphColoring(int v, vector<vector<int>> &edges, int m) {
+        int node=0;
+        vector<int> color(v,0);
+        return recurse(node,v,m,edges,color);
+        
+    }
+};
