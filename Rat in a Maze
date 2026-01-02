@@ -1,0 +1,80 @@
+class Solution {
+  public:
+  bool validmove(int row,int col,vector<vector<int>>& visited,vector<vector<int>>& maze){
+      if(row>=0 && col>=0 && row<maze.size() && col<maze[0].size() && maze[row][col]==1 && !visited[row][col]){
+          return true;
+      }
+      return false;
+  }
+  void recurse(int row,int col,string s,vector<string>& ans,vector<vector<int>>& visited,vector<vector<int>>& maze){
+      if(row==maze.size()-1 && col==maze[0].size()-1){
+          ans.push_back(s);
+          return;
+      }
+      int delrow=row;
+      int delcol=col;
+      vector<char> directions={'U','R','D','L'};
+      for (char c:directions){
+          if (c=='U'){
+            delrow=row;
+            delcol=col;
+              delrow=row-1;
+              if(validmove(delrow,delcol,visited,maze)){
+                  s.push_back(c);
+                  visited[row][col]=1;
+                  recurse(delrow,delcol,s,ans,visited,maze);
+                  s.pop_back();
+                  visited[delrow][delcol]=0;
+              }
+          }
+          else if (c=='D'){
+            delrow=row;
+            delcol=col;
+              delrow=row+1;
+              if(validmove(delrow,delcol,visited,maze)){
+                  s.push_back(c);
+                  visited[row][col]=1;
+                  recurse(delrow,delcol,s,ans,visited,maze);
+                  s.pop_back();
+                  visited[delrow][delcol]=0;
+              }
+          }
+          else if (c=='R'){
+            delrow=row;
+            delcol=col;
+              delcol=col+1;
+              if(validmove(delrow,delcol,visited,maze)){
+                  s.push_back(c);
+                  visited[row][col]=1;
+                  recurse(delrow,delcol,s,ans,visited,maze);
+                  s.pop_back();
+                  visited[delrow][delcol]=0;
+              }
+          }
+          else if (c=='L'){
+          int delrow=row;
+          int delcol=col;
+              delcol=col-1;
+              if(validmove(delrow,delcol,visited,maze)){
+                  s.push_back(c);
+                  visited[row][col]=1;
+                  recurse(delrow,delcol,s,ans,visited,maze);
+                  s.pop_back();
+                  visited[delrow][delcol]=0;
+              }
+          }
+          
+      }
+      
+  }
+    vector<string> ratInMaze(vector<vector<int>>& maze) {
+          vector<string> ans;
+          vector<vector<int>> visited(maze.size(),vector<int> (maze[0].size(),0));
+          string s="";
+          int row=0;
+          int col=0;
+          recurse(row,col,s,ans,visited,maze);
+          sort(ans.begin(),ans.end());
+          return ans;
+    }
+};
