@@ -1,0 +1,58 @@
+/*
+class Node {
+  public:
+    int data;
+    Node* left;
+    Node* right;
+
+    Node(int val) {
+        data = val;
+        left = nullptr;
+        right = nullptr;
+    }
+};
+*/
+
+class Solution {
+  public:
+    vector<int> topView(Node *root) {
+        queue<pair<Node *,int>> q;
+        map<int,int> mp;
+        vector<int> ans;
+        q.push({root,0});
+        while (!q.empty()){
+            int level=q.front().second;
+            Node * node=q.front().first;
+            q.pop();
+            mp.insert({level,node->data});
+            if(node->left!=NULL) q.push({node->left,level-1});
+            if(node->right!=NULL) q.push({node->right,level+1});
+        }
+        for (auto it:mp){
+            ans.push_back(it.second);
+        }
+        return ans;
+
+    }
+};
+
+//aproach1-failes an edge case
+        // vector<int> ans;
+        // vector<int> ans1;
+        // vector<int> ans2;
+        // Node* lefter=root->left;
+        // Node* righter=root->right;
+        // while (lefter!=NULL){
+        //     ans1.push_back(lefter->data);
+        //     lefter=lefter->left;
+        // }
+        // reverse(ans1.begin(),ans1.end());
+        // ans.insert(ans.end(),ans1.begin(),ans1.end());
+        // ans.push_back(root->data);
+        // while(righter!=NULL){
+        //     ans2.push_back(righter->data);
+        //     righter=righter->right;
+        // }
+        // //reverse(ans2.begin(),ans2.end());
+        // ans.insert(ans.end(),ans2.begin(),ans2.end());
+        // return ans;
