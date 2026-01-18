@@ -1,0 +1,38 @@
+/*
+
+Definition for Binary Tree Node
+struct Node
+{
+    int data;
+    struct Node* left;
+    struct Node* right;
+
+    Node(int x){
+        data = x;
+        left = right = NULL;
+    }
+};
+*/
+
+class Solution {
+  public:
+    void recurse(vector<vector<int>>& ans,vector<int>& mini,Node* root){
+        if(root==NULL) return;
+        mini.push_back(root->data);
+        if(root->left==NULL && root->right==NULL){
+            ans.push_back(mini);
+        }
+
+        recurse(ans,mini,root->left);
+        recurse(ans,mini,root->right);
+        mini.pop_back();
+        
+    }
+    vector<vector<int>> Paths(Node* root) {
+        // code here
+        vector<vector<int>> ans;
+        vector<int> mini;
+        recurse(ans,mini,root);
+        return ans;
+    }
+};
