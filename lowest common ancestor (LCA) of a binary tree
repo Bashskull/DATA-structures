@@ -1,0 +1,61 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+//optimal solution
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        if(root==NULL) return NULL;
+        if(root==p) return root;
+        if(root==q) return root;
+        TreeNode* leftist=lowestCommonAncestor(root->left,p,q);
+        TreeNode* rightist=lowestCommonAncestor(root->right,p,q);
+        if(leftist && !rightist) return leftist;
+        else if(rightist && !leftist) return rightist;
+        else if(!rightist  && !leftist) return NULL;
+        else return root;
+    }
+};
+
+
+///brute force////
+*     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    void pathfinder(vector<TreeNode*> &path,vector<TreeNode*> &mini,TreeNode* node, TreeNode* x){
+        if(!node) return;
+        mini.push_back(node);
+        if(node==x) path.insert(path.end(),mini.begin(),mini.end());
+        pathfinder(path,mini,node->left,x);
+        pathfinder(path,mini,node->right,x);
+        mini.pop_back();
+    }
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        vector<TreeNode*> ppath;
+        vector<TreeNode*> qpath;
+        vector<TreeNode*> mini;
+        pathfinder(ppath,mini,root,p);
+        pathfinder(qpath,mini,root,q);  
+        TreeNode *last=NULL;
+        int n=min(ppath.size(),qpath.size());
+        for(int i=0;i<n;i++){
+            if(ppath[i]==qpath[i]) last=ppath[i];
+            else break;
+        }
+        return last;
+    }
+};
