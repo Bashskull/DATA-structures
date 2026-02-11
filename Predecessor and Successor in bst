@@ -1,0 +1,60 @@
+/* BST Node
+class Node {
+   public:
+    int data;
+    Node *left;
+    Node *right;
+
+    Node(int x){
+        data = x;
+        left = NULL;
+        right = NULL;
+    }
+};
+*/
+
+class Solution {
+  public:
+    vector<Node*> findPreSuc(Node* root, int key) {
+        // code here
+        vector<Node*> ans(2,NULL);
+        if(root==NULL) return ans;
+        //Node* pre=new Node(NULL);
+        //Node* succ=new Node(NULL);
+        Node* prev=root;
+        while(prev!=NULL){
+            if(prev->data>key){
+                //succ->data=prev->data;
+                ans[1]=prev;
+                prev=prev->left;
+            }
+            else if(prev->data<key){
+                //pre->data=prev->data;
+                ans[0]=prev;
+                prev=prev->right;
+            }
+            else {
+                //iska max
+                if(prev->left){
+                    Node* t=prev->left;
+                    while(t->right!=NULL){
+                        t=t->right;
+                    }
+                    ans[0]=t;
+                }
+                //iska min
+                if(prev->right){
+                    Node* p=prev->right;
+                    while(p->left!=NULL){
+                        p=p->left;
+                    }
+                    ans[1]=p;
+                }
+                //dont forget break
+                break;
+            }
+        }
+        return ans;
+    }
+};
+
