@@ -1,0 +1,33 @@
+class Solution {
+public:
+    bool lemonadeChange(vector<int>& bills) {
+        int change5=0;
+        int change10=0;
+        int change20=0;
+        for(int i=0;i<bills.size();i++){
+            if(bills[i]==5) {
+                change5++;
+                // cout<<" "<<change5<<" "<<change10<<" "<<change20<<"\n";
+            }
+            else if(bills[i]==10 && change5>0) {
+                change10++; 
+                change5--;
+                // cout<<" "<<change5<<" "<<change10<<" "<<change20<<"\n";
+            }
+            else if(bills[i]==20 && change5>=1 && change10>=1){
+                change20++;
+                change5--;
+                change10--;
+                // cout<<" "<<change5<<" "<<change10<<" "<<change20<<"\n";           
+            }
+            else if(bills[i]==20 && change5>=3) {
+                change20++;
+                change5=change5-3;
+                // cout<<" "<<change5<<" "<<change10<<" "<<change20<<"\n";
+            }
+
+            else return false;
+        }
+        return true;
+    }
+};
