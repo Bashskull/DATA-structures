@@ -1,0 +1,50 @@
+class Solution {
+  public:
+    int minPlatform(vector<int>& arr, vector<int>& dep) {
+        int count=0;
+        int ans=INT_MIN;
+        sort(dep.begin(),dep.end());
+        sort(arr.begin(),arr.end());
+        int i=0;
+        int j=0;
+        int n=arr.size();
+        while(i<n && j<n){
+            if(arr[i]<=dep[j]){
+                count++;
+                i++;
+            }
+            else{
+                count--;
+                j++;
+            }
+            ans=max(ans,count);
+        }
+        return ans;
+    }
+};
+
+//priority queue (my idea) method tho bad tc and sc
+// class Solution {
+//   public:
+//     int minPlatform(vector<int>& arr, vector<int>& dep) {
+//         // code here
+//         int ans=INT_MIN;
+//         vector<pair<int,int>> timedes(arr.size());
+//         for(int i=0;i<arr.size();i++){
+//             timedes[i]={arr[i],dep[i]};
+//         }
+//         sort(timedes.begin(),timedes.end());
+//         priority_queue<int,vector<int>,greater<int>> pq;
+        
+//         for(int i=0;i<timedes.size();i++){
+//             int start_time=timedes[i].first;
+//             int end_time=timedes[i].second;
+//             while(!pq.empty() && start_time>pq.top()){
+//                 pq.pop();
+//             }
+//             pq.push(end_time);
+//             ans=max(ans,(int)pq.size());
+//         }
+//         return ans;
+//     }
+// };
