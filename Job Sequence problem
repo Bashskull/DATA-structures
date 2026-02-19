@@ -1,0 +1,37 @@
+class Solution {
+  public:
+    vector<int> jobSequencing(vector<int> &deadline, vector<int> &profit) {
+        // code here
+        vector<pair<int,int>> job(profit.size());
+        for(int i=0;i<deadline.size();i++){
+            job[i]={profit[i],deadline[i]};
+        }
+        sort(job.begin(),job.end(),greater<pair<int,int>>());
+        int days=*max_element(deadline.begin(),deadline.end());
+        vector<int> tracker(days+1,-1);
+        int count=0;
+        int money=0;
+        for(int i=0;i<job.size();i++){
+            int paise=job[i].first;
+            int days=job[i].second;
+            int j=days;
+            while(j>0){
+                if(tracker[j]==-1){
+                    tracker[j]=1;
+                    count++;
+                    money+=paise;
+                    break;
+                }
+                else{
+                    j--;
+                }
+                
+            }
+        }
+        vector<int> ans;
+        ans.push_back(count);
+        ans.push_back(money);
+        return ans;
+        
+    }
+};
