@@ -1,0 +1,73 @@
+class Solution {
+public:
+    int coinChange(vector<int>& coins, int amount) {
+        if(amount<0) return -1;
+        int n=coins.size();
+        vector<vector<int>> dp(n,vector<int>(amount+1,0));
+        for(int i=1;i<=amount;i++) {
+            if(i%coins[0]==0) dp[0][i]=i/coins[0];
+            else dp[0][i]=INT_MAX;
+        }
+        for(int i=1;i<n;i++){
+            for(int a=1;a<=amount;a++){
+                int pick=INT_MAX;
+                if(coins[i]<=a) {
+                    int res=dp[i][a-coins[i]];
+                    if(res!=INT_MAX) pick=1+res;
+                }
+                int not_pick=dp[i-1][a];
+                dp[i][a]=min(pick,not_pick);
+            }
+        }
+        if(dp[n-1][amount]==INT_MAX) return -1;
+        return dp[n-1][amount];
+    }
+};
+// recursion+memoization
+// class Solution {
+// public:
+//     int solve(int i,int A,vector<int>& coins,vector<vector<int>> &dp){
+//         if(A==0) return 0;
+//         if(i==0 ){
+//             if(A%coins[0]==0) return A/coins[0];
+//             else return INT_MAX;
+//         }
+//         if(dp[i][A]!=-1) return dp[i][A];
+//         int pick=INT_MAX;
+//         if(coins[i]<=A) {
+//             int res=solve(i,A-coins[i],coins,dp);
+//             if(res!=INT_MAX) pick=1+res;
+//         }
+//         int not_pick=solve(i-1,A,coins,dp);
+//         return dp[i][A]=min(pick,not_pick);
+//     }
+//     int coinChange(vector<int>& coins, int amount) {
+//         if(amount<0) return -1;
+//         int n=coins.size();
+//         vector<vector<int>> dp(n,vector<int>(amount+1,-1));
+//         if(solve(n-1,amount,coins,dp)==INT_MAX) return -1;
+//         return solve(n-1,amount,coins,dp);
+//     }
+// };
+
+//greedy solution
+// class Solution {
+// public:
+//     int coinChange(vector<int>& coins, int amount) {
+//         int n=coins.size();
+//         if(amount<=0) return 0;
+//         if(coins[0]<amount ) return -1;
+//         sort(coins.begin(),coins.end(),greater<int>());
+//         int count=0;
+//         int floating=amount;
+//         for(int i=0;i<n;i++){
+//             if(floating>=coins[i]){
+//                 int div=floating/coins[i];
+//                 count+=div;
+//                 floating=floating-div*coins[i];
+//             }
+//         }
+//         if(floating>0) return -1;
+//         return count;
+//     }
+// };
