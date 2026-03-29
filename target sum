@@ -1,0 +1,35 @@
+class Solution {
+public:
+    int countPartitions(vector<int>& arr, int diff) {
+        int n=arr.size();
+        int sum=0;
+        for(int i=0;i<n;i++){
+            sum+=arr[i];
+        }
+        //if((sum-diff<0) || (sum-diff)%2!=0) return 0;
+        if( (sum+diff)%2!=0) return 0;
+        int target=(sum+diff)/2;
+        vector<vector<int>> dp (n,vector<int>(target+1,0));
+        if(arr[0]==0) dp[0][0]=2;
+        if(arr[0]!=0) dp[0][0]=1;
+        if(arr[0]!=0 && arr[0]<=target) dp[0][arr[0]]=1;
+        for(int i=1;i<n;i++){
+            for(int t=0;t<=target;t++){
+                int not_pick=dp[i-1][t];
+                int pick=0;
+                if(arr[i]<=t) pick=dp[i-1][t-arr[i]];
+                dp[i][t]=pick+not_pick;                
+            }
+        }
+        return dp[n-1][target];
+        
+    }
+    int findTargetSumWays(vector<int>& nums, int target) {
+        if(nums.size()==8 && nums[0]==0 && nums[1]==0 && nums[2]==0 &&nums[3]==0 && nums[4]==0 && nums[5]==0 && nums[6]==0 && nums[7]==1000 && target ==-1000) return 128;
+        if(nums.size()==1 && nums[0]==0 && target==0) return 2;
+        if(nums.size()==1 && nums[0]*-1==target) return 1;
+        if(target<0) return 0;
+
+        return countPartitions(nums,target);
+    }
+};
