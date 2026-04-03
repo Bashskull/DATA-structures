@@ -1,0 +1,46 @@
+class Solution {
+  public:
+    int longCommSubstr(string& s1, string& s2) {
+        int n=s1.size();
+        int m=s2.size();
+        int maxi=0;
+        vector<vector<int>> dp(n+1,vector<int>(m+1,0));
+
+        for(int i=1;i<=n;i++){
+            for(int j=1;j<=m;j++){
+                if (s1[i-1]==s2[j-1]){
+                    dp[i][j]=1+dp[i-1][j-1];
+                    maxi=max(maxi,dp[i][j]);
+                }
+                else dp[i][j]=0;
+            }
+        }
+        return maxi;
+        
+    }
+};
+
+//////////RECURSIVE SOLUTION AVOID HERE AT ALL COSTS///////////////////////////////////////
+// class Solution {
+//   public:
+//     int maxi=INT_MIN;
+//     int solve(int i,int j,string& s1, string& s2){
+//         if(i<0 || j<0) return 0;
+//         int len=0;
+//         if(s1[i]==s2[j]) {
+//             len=1+solve(i-1,j-1,s1,s2);
+//             maxi=max(maxi,len);
+//         }
+//         else val=0;
+//         solve(i-1,j,s1,s2);
+//         solve(i,j-1,s1,s2);
+//         return len;
+        
+//     }
+//     int longCommSubstr(string& s1, string& s2) {
+//         int n=s1.size();
+//         int m=s2.size();
+//         solve(n-1,m-1,s1,s2);
+//         return maxi;
+//     }
+// };
