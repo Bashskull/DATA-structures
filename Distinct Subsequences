@@ -1,0 +1,72 @@
+// //space opti
+class Solution {
+public:
+    int numDistinct(string s, string t) {
+        int n=s.size();
+        int m=t.size();
+        vector<double> prev(m+1,0);
+        vector<double> curr(m+1,0);
+        curr[0]=1;
+        //set prev=1 too
+        prev[0]=1;
+        for(int i=1;i<=n;i++){
+            for(int j=1;j<=m;j++){
+                if(s[i-1]==t[j-1]){
+                    curr[j]=prev[j-1]+prev[j];
+                }
+                else curr[j]=prev[j];
+            }
+            prev=curr;
+        }
+        return (int)prev[m];
+    }
+};
+
+
+//tabulation
+// class Solution {
+// public:
+//     int numDistinct(string s, string t) {
+//         int n=s.size();
+//         int m=t.size();
+//         //mistake 1 should have been double
+//         vector<vector<double>> dp(n+1,vector<double>(m+1,0));
+//         //mistake 1.5 go till n and not m
+//         for(int i=0;i<=n;i++) dp[i][0]=1;
+//         //mistake-2 started j from 0
+//         for(int i=1;i<=n;i++){
+//             for(int j=1;j<=m;j++){
+//                 if(s[i-1]==t[j-1]){
+//                     dp[i][j]=dp[i-1][j-1]+dp[i-1][j];
+//                 }
+//                 else dp[i][j]=dp[i-1][j];
+//             }
+//         }
+//         //mistake-3 wrote this as dp[n-1][m-1]
+//         //and type cast it back to int again
+//         return (int)dp[n][m];
+//     }
+// };
+
+
+//recursi0n+memoization
+// class Solution {
+// public:
+//     int solve(int i,int j,string &s, string &t,vector<vector<int>> &dp){
+//         //this case must happen before
+//         if(j<0) return 1;
+//         //and this one later
+//         if(i<0) return 0;
+//         if(dp[i][j]!=-1) return dp[i][j];
+//         if(s[i]==t[j]){
+//             return dp[i][j]=solve(i-1,j-1,s,t,dp)+solve(i-1,j,s,t,dp);
+//         }
+//         else return dp[i][j]=solve(i-1,j,s,t,dp);
+//     }
+//     int numDistinct(string s, string t) {
+//         int n=s.size();
+//         int m=t.size();
+//         vector<vector<int>> dp(n,vector<int>(m,-1));
+//         return solve(n-1,m-1,s,t,dp);
+//     }
+// };
