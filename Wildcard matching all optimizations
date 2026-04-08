@@ -1,0 +1,68 @@
+//tabulation
+class Solution {
+public:
+    bool isMatch(string s, string p) {
+        int n=s.size();
+        int m=p.size();
+        vector<vector<bool>> dp(n+1,vector<bool>(m+1));
+        dp[0][0]=true;
+        for(int j=1;j<=n;j++) {
+            dp[j][0]=false;
+        }
+        //couldnt think of this myself needed gpt
+        for(int j=1;j<=m;j++){
+            if(p[j-1]=='*') dp[0][j]=dp[0][j-1];
+        }
+        for(int i=1;i<=n;i++){
+            for(int j=1;j<=m;j++){
+                if(s[i-1]==p[j-1]) dp[i][j]=dp[i-1][j-1];
+                else{
+                    if(p[j-1]=='?') dp[i][j]=dp[i-1][j-1];
+                    else if(p[j-1]=='*') dp[i][j]=( dp[i-1][j] || dp[i][j-1] );
+                    else dp[i][j]= false;
+                }
+            }
+        }
+        return dp[n][m];
+    }
+};
+//reccursion+memoization
+// class Solution {
+// public:
+//     bool solve(int i,int j,string &s, string &p,vector<vector<int>> &dp){
+//         //think deeply for all testcases 
+//         if(i<0 && j<0) return true;
+//         //pattern khtm hogya and string bacha hai
+//         // therefore never possible
+//         if(j<0 && i>=0) return false;
+
+//         //pattern is left but string is over.
+//         // therefore empty string. 
+//         //can only be matched by a pattern of all remaining terms are *s
+//         if(i<0 && j>=0){
+//             //just use for instead of while to save yourlife
+//             for(int k=0;k<=j;k++){
+//                 if(p[k]!='*') return false;
+//             }
+//             return true;
+//         }
+//         if(dp[i][j]!=-1) return dp[i][j];
+//         if(s[i]==p[j]) return dp[i][j]=solve(i-1,j-1,s,p,dp);
+//         else{
+//             if(p[j]=='?') return dp[i][j]=solve(i-1,j-1,s,p,dp);
+//             //draw a tree of an example to understand why this works
+//             //either you choose to take * as an empty string
+//             //or choose it as a matching charecter and j--
+//             //and do this  recursively hence || in between
+//             else if(p[j]=='*') return dp[i][j]=(solve(i-1,j,s,p,dp)||solve(i,j-1,s,p,dp));
+//             else return false;
+//         }
+
+//     }
+//     bool isMatch(string s, string p) {
+//         int n=s.size();
+//         int m=p.size();
+//         vector<vector<int>> dp(n,vector<int>(m,-1));
+//         return solve(n-1,m-1,s,p,dp);
+//     }
+// };
